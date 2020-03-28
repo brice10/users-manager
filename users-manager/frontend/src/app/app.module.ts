@@ -13,6 +13,7 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { UsersComponent } from './components/users/users.component';
 import { AdminsComponent } from './components/admins/admins.component';
 import { ConnexionComponent } from './components/connexion/connexion.component';
+import { AccueilComponent } from './components/accueil/accueil.component';
 import { PersonnelComponent } from './components/personnel/personnel.component';
 import { DetailPersonnelComponent } from './components/detail-personnel/detail-personnel.component';
 
@@ -33,6 +34,7 @@ import { PersonnelService } from './services/personnel.service';
     UsersComponent,
     AdminsComponent,
     ConnexionComponent,
+    AccueilComponent,
     PersonnelComponent,
     DetailPersonnelComponent,
   ],

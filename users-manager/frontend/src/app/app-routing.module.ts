@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './services/guard/auth-guard/auth.guard';
 
 import { ConnexionComponent } from './components/connexion/connexion.component';
+import { AccueilComponent } from './components/accueil/accueil.component';
 import {UsersComponent } from './components/users/users.component';
 import { PersonnelComponent } from './components/personnel/personnel.component';
 import { DetailPersonnelComponent } from './components/detail-personnel/detail-personnel.component';
@@ -19,6 +20,12 @@ const routes: Routes = [
     path: 'connexion',
     name: 'connexion',
     component: ConnexionComponent,
+  },
+  {
+    path: 'accueil',
+    name: 'accueil',
+    component: AccueilComponent,
+    canActivate: [AuthGuard] ,
   },
   {
     path: 'user',

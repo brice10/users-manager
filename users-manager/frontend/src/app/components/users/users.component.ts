@@ -53,29 +53,12 @@ export class UsersComponent implements OnInit {
     return this.addUserForm.get('password');
   }
 
-  public processFile(imageInput: any) {
-    console.log(imageInput);
-    if (imageInput.files[0]) {
-      const file: File = imageInput.files[0];
-      var pattern1 = /image-jpeg/;
-      var pattern2 = /image-png/;
-      var pattern3 = /image-jpg/;
-
-      if (!file.type.match(pattern1) || !file.type.match(pattern2) || !file.type.match(pattern3)) {
-        alert('Invalid format');
-        return;
-      }
-
-    }
-  }
-
   public async getAllUsers() {
     this.allUsers = this.personnelService.personnelList;
     //await this.userApi.getAllUsers().subscribe(users => (this.allUsers = users));
   }
 
   public async addUser() {
-    console.log(this.name, this.surname, this.email, this.password, this.photoUrl);
     this.editedUser = undefined;
     this.user.name = this.user.name.trim();
     this.user.surname = this.user.surname.trim();
@@ -85,7 +68,7 @@ export class UsersComponent implements OnInit {
       return;
     
     //await this.userApi.createUser(this.user).subscribe(user => this.allUsers.push(user));
-    console.log(this.user.photoUrl);
+    this.personnelService.createPersonnel(this.user);
     this.reset();
   }
 
@@ -109,7 +92,8 @@ export class UsersComponent implements OnInit {
     this.editedUser = user;
   }
 
-  public async updateUserInformations() {
+  public updateUserInformations() {
+  
     if(this.editedUser) {
       // await this.userApi.updateUser(this.editedUser).subscribe(user => {
       //   const index = user
@@ -119,6 +103,7 @@ export class UsersComponent implements OnInit {
       //     this.allUsers[index] = user;
       //   }
       // });
+      this.personnelService.updateUser(this.editedUser);
       this.editedUser = undefined;
     }
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { User } from './../../services/model/user';
 import { UserFormValidatorService } from './../../services/userFormValidator.service'
@@ -32,6 +32,8 @@ export class ConnexionComponent implements OnInit {
 
   ngOnInit(): void {
     this.ckeckIfUserIsConnected();
+    let html = document.querySelector('html');
+    html.classList.add("bg");
   }
 
   get email() {
@@ -44,7 +46,7 @@ export class ConnexionComponent implements OnInit {
   public ckeckIfUserIsConnected() {
     this.authState = this.authService.isAuth;
     if(this.authState) {
-      this.router.navigate(['user']);
+      this.router.navigate(['accueil']);
     }
   }
 
@@ -52,7 +54,7 @@ export class ConnexionComponent implements OnInit {
     this.authService.login().then(
       () => {
         this.authState = this.authService.isAuth;
-        this.router.navigate(['/user']);
+        this.router.navigate(['/accueil']);
       });
   }
 

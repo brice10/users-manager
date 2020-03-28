@@ -17,7 +17,7 @@ export class DetailPersonnelComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
-    this.personnelData = this.personnelService.getPersonnelById(+id);
+    this.personnelData = this.personnelService.getPersonnelById(id);
   }
 
 }

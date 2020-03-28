@@ -9,9 +9,9 @@
 
                 <!--Card image-->
                 <div class="view overlay">
-                    <img src="./../../../assets/logo.jpg" class="card-img-top"
+                    <img [src]="personnel.photoUrl" class="card-img-top image"
                     alt="">
-                    <a href="#">
+                    <a [routerLink]="[personnel.id]">
                         <div class="mask rgba-white-slight"></div>
                     </a>
                 </div>
