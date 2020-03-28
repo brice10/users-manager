@@ -1,9 +1,9 @@
 <!-- Toolbar -->
-<div class="shadow-sm p-3 mb-5 toolbar fixed-top" role="banner">
-    
-  <button class="navbar-toggler hidden-lg-up text-light" data-toggle="drawer" data-target="#app-navigation-drawer">
-    <span class="sr-only">Toggle drawer</span>
-    <i class="fas fa-bars"></i>
+<div class="shadow-sm p-3 mb-10 toolbar fixed-top scrolling-navbar" role="banner">
+
+  <!-- Navigation drawer btn -->
+  <button class="navbar-toggler" type="button">
+    <i class="fas fa-bars text-white"></i>
   </button>
 
   <img
@@ -11,17 +11,37 @@
     alt="Fasion shop Logo"
     src="./../../../assets/logo.jpg"
   />
-  <span id="welcome-text">Fashion Shop</span>
 
-  <div class="navbar navbar-expand-sm">
-    
-  </div>
+  <!-- Navbar brand -->
+  <span class="navbar-brand" id="welcome-text"><strong>Users Manager</strong></span>
+
+  <nav class="navbar navbar-default">
+    <!-- menu container -->
+    <div class="container-fluid">
+      <!-- Links -->
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active">
+          <a routerLink="connexion"><strong>Accueil</strong></a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="user"><strong>DashBoard</strong></a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="personnel"><strong>Personnel</strong></a>
+        </li>
+      </ul>
+      <!-- Links -->
+  
+    </div>
+    <!-- Collapsible content -->
+  </nav>
+  
 
   <div class="spacer"></div>
-
+  
   <form class="form-inline mr-4" id="search-bar">
     <div class="md-form my-0">
-      <input class="form-control text-light" type="text" placeholder="Search" aria-label="Search">
+      <input class="form-control text-light" type="text" placeholder="Search for users" aria-label="Search">
       <i class="fas fa-search text-white ml-3" aria-hidden="true"></i>
     </div>
   </form>

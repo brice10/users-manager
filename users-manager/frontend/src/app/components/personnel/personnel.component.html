@@ -1,0 +1,38 @@
+<div class="container">
+    <h1 class="text-center card-text">Membres du personnel de l'entreprise</h1>
+    <hr/>
+    <div class="row">
+        <div *ngFor="let personnel of allUsers" class="col-lg-4 col-md-12 mb-4">
+
+            <!--Card-->
+            <div class="card z-depth-1-half">
+
+                <!--Card image-->
+                <div class="view overlay">
+                    <img src="./../../../assets/logo.jpg" class="card-img-top"
+                    alt="">
+                    <a href="#">
+                        <div class="mask rgba-white-slight"></div>
+                    </a>
+                </div>
+
+                <!--Card content-->
+                <div class="card-body">
+                    <!--Title-->
+                    <h4 class="card-title">{{ personnel.name }}</h4>
+                    <!--Text-->
+                    <p class="card-text">
+                        Some quick example text to build on the card title and make up the bulk of the
+                        card's content.
+                    </p>
+                    <div class="text-center">
+                        <a [routerLink]="[personnel.id]" class="btn btn-indigo">En savoir plus <i class="fas fa-chevron-right text-white ml-3" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

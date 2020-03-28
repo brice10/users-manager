@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { User } from '../../components/users/user';
+import { User } from '../model/user';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
 
 @Injectable()
@@ -37,7 +37,7 @@ export class UserApi {
         .pipe(catchError(this.handleError('updateUser', user)));
     }
 
-    public deleteUser(id: number): Observable <{}> {
+    public deleteUser(id: string): Observable <{}> {
         const uri = `api/user/${id}`;
         return this.http
         .delete(uri)

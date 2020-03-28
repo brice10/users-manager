@@ -1,6 +1,6 @@
 // MenuBar CSS
 .toolbar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -51,4 +51,23 @@
     #welcome-text {
         display: none;
     }
+}
+ul {
+    flex-direction: row;
+}
+li {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+a {
+    color: rgb(255, 211, 218);
+}
+a:hover {
+    color: rgb(255, 160, 176);
+}
+.navbar-brand {
+    font-size: medium;
+}
+.active {
+    border-bottom: 2px solid rgb(255, 211, 218);
 }

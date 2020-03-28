@@ -1,14 +1,11 @@
 
 <div>
-  <app-menu-bar></app-menu-bar>
-  <app-navigation-drawer id="app-navigation-drawer"></app-navigation-drawer>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <h1 class="text-center">Users Manager</h1>
-        <app-users></app-users>
-      </div>
-    </div>
+  <app-menu-bar class="app-menu"></app-menu-bar>
+  <app-navigation-drawer class="app-navigation-drawer"></app-navigation-drawer>
+
+  <div class="content" role="main">
+    <router-outlet></router-outlet>
   </div>
+
 </div>
     

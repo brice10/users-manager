@@ -1,21 +1,21 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { User } from '../../services/model/user';
-import { PersonnelService } from './../../services/personnel.service'
-import { UserFormValidatorService } from './../../services/userFormValidator.service'
+import { User } from './../../services/model/user';
+import { UserApi } from '../../services/Api/userApi.service'
+import { UserFormValidatorService } from '../../services/userFormValidator.service'
 
 import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  providers: [UserFormValidatorService],
+  selector: 'app-admins',
+  templateUrl: './admins.component.html',
+  styleUrls: ['./admins.component.scss'],
+  providers: [UserApi, UserFormValidatorService],
 })
-export class UsersComponent implements OnInit {
-  public allUsers: any[] = [];
+export class AdminsComponent implements OnInit {
+  public allUsers: User[] = [];
   public editedUser: User;
-  public user: any = {
+  public user: User = {
     id: '',
     name: '',
     surname: '',
@@ -28,9 +28,9 @@ export class UsersComponent implements OnInit {
   public addUserForm: any =  this.userFormValidatorService.addUserForm;
 
   constructor(
+    private userApi: UserApi,
     private userFormValidatorService: UserFormValidatorService,
     private formBuilder: FormBuilder,
-    private personnelService: PersonnelService,
   ) { }
 
   ngOnInit(): void {
@@ -70,8 +70,7 @@ export class UsersComponent implements OnInit {
   }
 
   public async getAllUsers() {
-    this.allUsers = this.personnelService.personnelList;
-    //await this.userApi.getAllUsers().subscribe(users => (this.allUsers = users));
+    await this.userApi.getAllUsers().subscribe(users => (this.allUsers = users));
   }
 
   public async addUser() {
@@ -84,7 +83,7 @@ export class UsersComponent implements OnInit {
     if(!this.user.name || !this.user.surname || !this.user.email || !this.user.photoUrl || !this.user.password)
       return;
     
-    //await this.userApi.createUser(this.user).subscribe(user => this.allUsers.push(user));
+    await this.userApi.createUser(this.user).subscribe(user => this.allUsers.push(user));
     console.log(this.user.photoUrl);
     this.reset();
   }
@@ -102,7 +101,7 @@ export class UsersComponent implements OnInit {
 
   public async deleteUser(user: User) {
     this.allUsers = this.allUsers.filter(member => member !== user);
-    //await this.userApi.deleteUser(user.id).subscribe();
+    await this.userApi.deleteUser(user.id).subscribe();
   }
 
   public editUserCurrentInformation(user: User): void {
@@ -111,14 +110,14 @@ export class UsersComponent implements OnInit {
 
   public async updateUserInformations() {
     if(this.editedUser) {
-      // await this.userApi.updateUser(this.editedUser).subscribe(user => {
-      //   const index = user
-      //                 ? this.allUsers.findIndex(member => member.id === this.editedUser.id)
-      //                 : -1;
-      //   if(index > -1) {
-      //     this.allUsers[index] = user;
-      //   }
-      // });
+      await this.userApi.updateUser(this.editedUser).subscribe(user => {
+        const index = user
+                      ? this.allUsers.findIndex(member => member.id === this.editedUser.id)
+                      : -1;
+        if(index > -1) {
+          this.allUsers[index] = user;
+        }
+      });
       this.editedUser = undefined;
     }
   }
