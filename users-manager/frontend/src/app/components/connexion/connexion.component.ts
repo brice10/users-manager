@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   selector: 'app-connexion',
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.scss'],
-  providers: [UserFormValidatorService],
+  providers: [UserFormValidatorService,],
 })
 export class ConnexionComponent implements OnInit {
 
@@ -31,7 +31,7 @@ export class ConnexionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authState = this.authService.isAuth;
+    this.ckeckIfUserIsConnected();
   }
 
   get email() {
@@ -41,11 +41,18 @@ export class ConnexionComponent implements OnInit {
     return this.connectUserForm.get('password');
   }
 
+  public ckeckIfUserIsConnected() {
+    this.authState = this.authService.isAuth;
+    if(this.authState) {
+      this.router.navigate(['user']);
+    }
+  }
+
   public onLogin() {
     this.authService.login().then(
       () => {
         this.authState = this.authService.isAuth;
-        this.router.navigate(['user']);
+        this.router.navigate(['/user']);
       });
   }
 

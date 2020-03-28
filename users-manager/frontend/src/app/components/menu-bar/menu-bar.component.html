@@ -46,7 +46,16 @@
     </div>
   </form>
 
-  <button type="button" mdbBtn outline="true" color="light" rounded="true" class="waves-effect" id="btn-signout">
+  <button 
+    [disabled]="!isAuth" 
+    type="button" 
+    mdbBtn 
+    outline="true" 
+    color="light" 
+    rounded="true" 
+    class="waves-effect" 
+    id="btn-signout"
+  >
     <i class="fas fa-sign-out-alt ml-2"></i>
     Sign Out
   </button>
