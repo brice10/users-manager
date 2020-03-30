@@ -1,6 +1,6 @@
 .error-message {
     display: contents;
-    color: red;
+    color: crimson;
 }
 .ng-container {
     text-align: end;
@@ -8,4 +8,8 @@
 .container {
     padding: 1%;
     padding-top: 5em;
+}
+.loading{
+    color: white;
+    padding-top: 50px;
 }

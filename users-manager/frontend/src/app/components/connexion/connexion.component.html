@@ -1,8 +1,10 @@
-<div>
+<div class="content">
     <div class="card z-depth-1-half">
+
         <div class="card-title">
-            <h2 class="text-center">Connexion</h2>
+            <h2 class="text-center"><strong>Connexion</strong></h2>
         </div>
+        
         <form class="form" [formGroup]="connectUserForm" (submit)="onLogin()">
 
             <div class="card-body">
@@ -34,3 +36,7 @@
         </form>
     </div>
 </div>
+<ngx-spinner name="chargement5" [fullScreen]="true" type="ball-scale-multiple" size="medium">
+    <p class="loading">Connexion</p>
+</ngx-spinner>
+<ngx-alerts></ngx-alerts>

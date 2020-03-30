@@ -24,7 +24,7 @@
           <a routerLink="accueil"><strong>Accueil</strong></a>
         </li>
         <li routerLinkActive="active">
-          <a routerLink="user"><strong>DashBoard</strong></a>
+          <a routerLink="dashboard"><strong>DashBoard</strong></a>
         </li>
         <li routerLinkActive="active">
           <a routerLink="personnel"><strong>Personnel</strong></a>
@@ -48,6 +48,7 @@
 
   <button 
     [disabled]="!isAuth" 
+    (click)="logout()"
     type="button" 
     mdbBtn 
     outline="true" 

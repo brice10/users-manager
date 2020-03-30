@@ -30,7 +30,20 @@
         </div>
 
         <div class="form-group">
-            <input formControlName="photoUrl" [(ngModel)]="user.photoUrl" type="file" class="form-control" placeholder="photo de l'utilisateur" accept=".png, .jpg, .jpeg" #imageInput required/>
+            <input formControlName="photoUrl" [(ngModel)]="user.photoUrl" type="file" class="form-control" placeholder="photo de l'utilisateur" accept=".png, .jpg, .jpeg" class="form-control-file" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Choisir le poste</label>
+            <select [(ngModel)]="user.poste" formControlName="poste" class="form-control" id="exampleFormControlSelect1" required>
+                <option value="administrateur">administrateur</option>
+                <option value="employe">employé</option>
+            </select>
+            <div *ngFor="let error of errorMessages.poste" class="ng-container">
+                <ng-container *ngIf="poste.hasError(error.type) && (poste.dirty || poste.touched)">
+                    <small class="error-message">{{ error.message }}</small>
+                </ng-container> 
+            </div>
         </div>
 
         <div class="form-group">
@@ -60,31 +73,40 @@
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> Photo: {{ user.photoUrl }} </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="file" [(ngModel)]="user.photoUrl" accept=".png, .jpg, .jpeg" (blur)="updateUserInformations()" (keyup.enter)="updateUserInformations()" required/>
+                    <input *ngIf="user===editedUser" class="form-control" type="file" [(ngModel)]="user.photoUrl" accept=".png, .jpg, .jpeg" (blur)="updateUser()" class="form-control-file" required/>
+                </a>
+            </td>
+            <td class="text-left">
+                <a (click)="editUserCurrentInformation(user)">
+                    <span *ngIf="user!==editedUser"> {{ user.poste }} </span>
+                    <select *ngIf="user===editedUser" (change)="notifyPosteChange($event.target.value)" formControlName="poste" class="form-control" (blur)="updateUser()" (keyup.enter)="updateUser()" required>
+                        <option value="administrateur">administrateur</option>
+                        <option value="employe">employé</option>
+                    </select>
                 </a>
             </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> {{ user.name }} </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="text" [(ngModel)]="user.name" (blur)="updateUserInformations()" (keyup.enter)="updateUserInformations()" required/>
+                    <input *ngIf="user===editedUser" class="form-control" type="text" [(ngModel)]="user.name" (blur)="updateUser()" (keyup.enter)="updateUser()" required/>
                 </a>
             </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> {{ user.surname }} </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="text" [(ngModel)]="user.surname" (blur)="updateUserInformations()" (keyup.enter)="updateUserInformations()" required/>
+                    <input *ngIf="user===editedUser" class="form-control" type="text" [(ngModel)]="user.surname" (blur)="updateUser()" (keyup.enter)="updateUser()" required/>
                 </a>
             </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> {{ user.email }} </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="email" [(ngModel)]="user.email" (blur)="updateUserInformations()" (keyup.enter)="updateUserInformations()" required/>
+                    <input *ngIf="user===editedUser" class="form-control" type="email" [(ngModel)]="user.email" (blur)="updateUser()" (keyup.enter)="updateUser()" required/>
                 </a>
             </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> Password choosed </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="password" [(ngModel)]="user.password" (blur)="updateUserInformations()" (keyup.enter)="updateUserInformations()" required/>
+                    <input *ngIf="user===editedUser" class="form-control" type="password" [(ngModel)]="user.password" (blur)="updateUser()" (keyup.enter)="updateUser()" required/>
                 </a>
             </td>
             <td class="text-right">
@@ -99,5 +121,14 @@
         <span class="small">Click on item to edit</span>
     </div>
 </div>
-
+<ngx-spinner name="chargement2" [fullScreen]="true" type="ball-fussion" size="medium">
+    <p class="loading">Création de l'utilisateur</p>
+</ngx-spinner>
+<ngx-spinner name="chargement3" [fullScreen]="true" type="ball-fussion" size="medium">
+    <p class="loading">Mise à jour de l'utilisateur</p>
+</ngx-spinner>
+<ngx-spinner name="chargement4" [fullScreen]="true" type="ball-fussion" size="medium">
+    <p class="loading">Suppréssion de l'utilisateur</p>
+</ngx-spinner>
+<ngx-alerts></ngx-alerts>
 

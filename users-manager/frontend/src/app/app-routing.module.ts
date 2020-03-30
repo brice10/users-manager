@@ -4,11 +4,9 @@ import { AuthGuard } from './services/guard/auth-guard/auth.guard';
 
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { AccueilComponent } from './components/accueil/accueil.component';
-import {UsersComponent } from './components/users/users.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PersonnelComponent } from './components/personnel/personnel.component';
-import { DetailPersonnelComponent } from './components/detail-personnel/detail-personnel.component';
-import { AdminsComponent } from './components/admins/admins.component';
-
+import { ProfilComponent } from './components/profil/profil.component';
 
 const routes: Routes = [
   {
@@ -28,9 +26,9 @@ const routes: Routes = [
     canActivate: [AuthGuard] ,
   },
   {
-    path: 'user',
-    name: 'user',
-    component: UsersComponent,
+    path: 'dashboard',
+    name: 'dashboard',
+    component: DashboardComponent,
     canActivate: [AuthGuard] ,
   },
   {
@@ -41,14 +39,8 @@ const routes: Routes = [
   },
   {
     path: 'personnel/:id',
-    name: 'detailPersonnel',
-    component: DetailPersonnelComponent,
-    canActivate: [AuthGuard] ,
-  },
-  {
-    path: 'admin',
-    name: 'admin',
-    component: AdminsComponent,
+    name: 'profil',
+    component: ProfilComponent,
     canActivate: [AuthGuard] ,
   },
 ] as Array<{

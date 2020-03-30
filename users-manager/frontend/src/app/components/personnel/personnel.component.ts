@@ -1,19 +1,24 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { PersonnelService } from 'src/app/services/personnel.service';
+import { LocalStorageService } from './../../services/store/localStorage.service';
+import { MessageService } from './../../services/message.service';
+
+import { AlertService } from 'ngx-alerts';
 
 @Component({
   selector: 'app-personnel',
   templateUrl: './personnel.component.html',
   styleUrls: ['./personnel.component.scss'],
-  providers: [PersonnelService,],
+  providers: [AlertService, MessageService],
 })
 export class PersonnelComponent implements OnInit {
 
   public allUsers: any[] = [];
   
   constructor(
-    private personnelService: PersonnelService,
+    private localStorageService: LocalStorageService,
+    private alertService: AlertService,
+    private messageService: MessageService,
   ) { }
 
   ngOnInit(): void {
@@ -21,7 +26,7 @@ export class PersonnelComponent implements OnInit {
   }
 
   public getAllUsers() {
-    this.allUsers = this.personnelService.personnelList;
+    this.allUsers = this.localStorageService.getAllUsersOnLocalStorage();
   }
 
 }

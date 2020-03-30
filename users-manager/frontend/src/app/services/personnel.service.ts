@@ -1,76 +1,67 @@
+
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
+
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
 import { User } from './model/user';
+import { HttpErrorHandler, HandleError } from './http-error-handler.service';
+
+import { LocalStorageService } from './store/localStorage.service';
+
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
 export class PersonnelService {
 
-    public personnelList: User[] = [
-        {
-            id: '1',
-            name: 'Zemtsop Ndadji',
-            surname: 'Brice Arléon',
-            email: 'arleonzemtsop@gmail.com',
-            photoUrl: './../../assets/personnel2.jpg',
-            password: 'admin1',
-        },
-        {
-            id: '2',
-            name: 'ZeKekng Ndadji',
-            surname: 'Maxime',
-            email: 'zekengmaxime@gmail.com',
-            photoUrl: './../../assets/personnel4.jpg',
-            password: 'admin2',
-        },
-        {
-            id: '3',
-            name: 'Nguedia Momo',
-            surname: 'Marionne',
-            email: 'nguediamomo@gmail.com',
-            photoUrl: './../../assets/personnel5.jpg',
-            password: 'personnel1',
-        },
-        {
-            id: '4',
-            name: 'Mvondo Momo',
-            surname: 'Ndolo',
-            email: 'mvondo@gmail.com',
-            photoUrl: './../../assets/personnel7.jpg',
-            password: 'personnel2',
-        },
-        {
-            id: '5',
-            name: 'Ngnizeko Momo',
-            surname: 'Arnold',
-            email: 'arnold@gmail.com',
-            photoUrl: './../../assets/personnel4.jpg',
-            password: 'personnel3',
-        },
-        {
-            id: '6',
-            name: 'Nguefack Momo',
-            surname: 'Djibril',
-            email: 'nguefack@gmail.com',
-            photoUrl: './../../assets/personnel7.jpg',
-            password: 'personnel4',
-        },
-    ];
-
-    public constructor() {}
-
-    public getPersonnelById(id: string) {
-        return this.personnelList.find(person => person.id === id);
+    private handleError: HandleError;
+    
+    public constructor(
+        private localStorageService: LocalStorageService,
+        private http: HttpClient,
+        private httpErrorHandler: HttpErrorHandler,
+        private spinner: NgxSpinnerService,
+    ) {
+        this.handleError = httpErrorHandler.createHandleError('PersonnelService');
+        this.initAllVariables();
     }
 
-    public createPersonnel(personnel: User) {
-        this.personnelList.push(personnel);
+    public initAllVariables() {
+        this.getAllUsersInLocal();
     }
 
-    public updateUser(editedUser: User) {
-        const index = editedUser
-                      ? this.personnelList.findIndex(member => member.id === editedUser.id)
-                      : -1;
-        if(index > -1) {
-          this.personnelList[index] = editedUser;
-        }
+    public async getAllUsersInLocal() {
+        this.spinner.show('chargement1');
+        await this.getAllUsers().subscribe(users => {
+            this.spinner.hide('chargement1');
+            this.localStorageService.storeAllUsersOnLocalStorage(users);
+        });
+    }
+    
+    public getAllUsers(): Observable <User[]> {
+        return this.http
+        .get<User[]>('http://localhost:8000/api/users')
+        .pipe(catchError(this.handleError('getAllUsers', [])));
+    }
+
+    public createUser(user: User): Observable <User> {
+        return this.http
+        .post<User>('http://localhost:8000/api/user', user)
+        .pipe(catchError(this.handleError('createUser', user)));
+    }
+
+    public updateUser(user: User): Observable <User> {
+        const uri = `http://localhost:8000/api/user/${user.id}`;
+        return this.http
+        .put<User>(uri, user)
+        .pipe(catchError(this.handleError('updateUser', user)));
+    }
+
+    public deleteUser(id: number): Observable <{}> {
+        const uri = `http://localhost:8000/api/user/${id}`;
+        return this.http
+        .delete(uri)
+        .pipe(catchError(this.handleError('deleteUser')));
     }
 }

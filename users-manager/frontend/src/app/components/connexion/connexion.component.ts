@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { User } from './../../services/model/user';
+
+import { LocalStorageService } from './../../services/store/localStorage.service';
+import { MessageService } from './../../services/message.service';
+
 import { UserFormValidatorService } from './../../services/userFormValidator.service'
 import { AuthService } from './../../services/auth.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { AlertService } from 'ngx-alerts';
 
 import { Router } from '@angular/router';
 
@@ -11,7 +17,7 @@ import { Router } from '@angular/router';
   selector: 'app-connexion',
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.scss'],
-  providers: [UserFormValidatorService,],
+  providers: [UserFormValidatorService, AlertService, MessageService,],
 })
 export class ConnexionComponent implements OnInit {
 
@@ -25,16 +31,27 @@ export class ConnexionComponent implements OnInit {
   public connectUserForm: any =  this.userFormValidatorService.connectUserForm;
 
   constructor(
+    private localStorageService: LocalStorageService,
     private userFormValidatorService: UserFormValidatorService,
     private authService: AuthService,
     private router: Router,
+    private spinner: NgxSpinnerService,
+    private alertService: AlertService,
+    private messageService: MessageService,
   ) { }
 
   ngOnInit(): void {
     this.ckeckIfUserIsConnected();
-    let html = document.querySelector('html');
-    html.classList.add("bg");
+    this.setBackgroundImage();
+    this.showAlerts();
   }
+
+  showAlerts(): void{
+    this.alertService.info('this is an info alert');
+    this.alertService.danger('this is a danger alert');
+    this.alertService.success('this is a success alert');
+    this.alertService.warning('this is a warning alert');
+  }   
 
   get email() {
     return this.connectUserForm.get('email');
@@ -43,24 +60,52 @@ export class ConnexionComponent implements OnInit {
     return this.connectUserForm.get('password');
   }
 
+  public async onLogin() {
+    const isAuth: boolean  = this.localStorageService.getAuthStateOnLocalStorage();
+    if(isAuth === true){
+      this.authState = true;
+      this.deleteBackgroundImage();
+      this.router.navigate(['/accueil'])
+    } else {
+      this.spinner.show('chargement5');
+      await this.authService.login(this.userConnexionData.email, this.userConnexionData.password).subscribe(users => {
+        if(!users || users.length === 0) {
+          alert("Identifiants incorrects");
+        } else {
+          this.authState = true;
+          this.localStorageService.storeAuthStateOnLocalStorage(true);
+          const user = this.localStorageService.getCurrentUserOnLocalStorage();
+          if(!user) {
+            this.localStorageService.storeCurrentUserOnLocalStorage(users[0]);
+          }
+          this.deleteBackgroundImage();
+          this.router.navigate(['/accueil'])
+        }
+        this.spinner.hide('chargement5');
+      });
+    }
+  }
+
   public ckeckIfUserIsConnected() {
-    this.authState = this.authService.isAuth;
+    this.authState = this.localStorageService.getAuthStateOnLocalStorage();
     if(this.authState) {
       this.router.navigate(['accueil']);
     }
   }
 
-  public onLogin() {
-    this.authService.login().then(
-      () => {
-        this.authState = this.authService.isAuth;
-        this.router.navigate(['/accueil']);
-      });
+  public setBackgroundImage() {
+    let html = document.querySelector('html');
+    html.classList.add("bg");
+  }
+
+  public deleteBackgroundImage() {
+    let html = document.querySelector('html');
+    html.classList.remove("bg");
   }
 
   public onLogout() {
-    this.authService.logout();
-    this.authState = this.authService.isAuth;
+    this.authState = this.localStorageService.getAuthStateOnLocalStorage();
+    this.router.navigate(['connexion']);
   }
 
   public reset(): void {

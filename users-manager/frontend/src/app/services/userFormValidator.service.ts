@@ -24,6 +24,9 @@ export class UserFormValidatorService {
       { type: 'required', message:'l\'adresse mail est obligatoire' },
       { type: 'pattern', message:'entrez une adresse mail valide' },
     ],
+    poste: [
+      { type: 'required', message:'le poste de l\'utilisateur est obligatoire' },
+    ],
     password: [
       { type: 'required', message:'le mot de passe est obligatoire' },
       { type: 'minlength', message:'le mot de passe doit avoir minimum 6 caractères' },
@@ -47,6 +50,11 @@ export class UserFormValidatorService {
         [
             Validators.required,
             Validators.pattern(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+        ]
+    ],
+    poste: ['',
+        [
+            Validators.required,
         ]
     ],
     photoUrl: ['',

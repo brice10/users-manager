@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AuthService } from './../../services/auth.service';
+import { Router } from '@angular/router';
+
+import { LocalStorageService } from './../../services/store/localStorage.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -12,11 +14,20 @@ export class MenuBarComponent implements OnInit {
   public isAuth: boolean = false;
 
   constructor(
-    private authService: AuthService,
-  ) { }
+    private localStorageService: LocalStorageService,
+    private router: Router,
+  ) { 
+    
+  }
 
   ngOnInit(): void {
-    this.isAuth = this.authService.isAuth;
+    this.isAuth = this.localStorageService.getAuthStateOnLocalStorage();
+    console.log(this.isAuth);
+  }
+
+  public logout() {
+    this.localStorageService.storeAuthStateOnLocalStorage(false);
+    this.router.navigate(['connexion']);
   }
 
 }

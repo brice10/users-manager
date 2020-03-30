@@ -1,6 +1,6 @@
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -10,12 +10,11 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationDrawerComponent } from './components/navigation-drawer/navigation-drawer.component';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
-import { UsersComponent } from './components/users/users.component';
-import { AdminsComponent } from './components/admins/admins.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ConnexionComponent } from './components/connexion/connexion.component';
 import { AccueilComponent } from './components/accueil/accueil.component';
 import { PersonnelComponent } from './components/personnel/personnel.component';
-import { DetailPersonnelComponent } from './components/detail-personnel/detail-personnel.component';
+import { ProfilComponent } from './components/profil/profil.component';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -24,6 +23,11 @@ import { MessageService } from './services/message.service';
 import { AuthService } from './services/auth.service';
 import { PersonnelService } from './services/personnel.service';
 
+import { LocalStorageService  } from './services/store/localStorage.service';
+
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { AlertModule } from 'ngx-alerts';
+
 
 
 @NgModule({
@@ -31,23 +35,25 @@ import { PersonnelService } from './services/personnel.service';
     AppComponent,
     NavigationDrawerComponent,
     MenuBarComponent,
-    UsersComponent,
-    AdminsComponent,
+    DashboardComponent,
     ConnexionComponent,
     AccueilComponent,
     PersonnelComponent,
-    DetailPersonnelComponent,
+    ProfilComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MDBBootstrapModule.forRoot(),
     AppRoutingModule,
+    NgxSpinnerModule,
+    AlertModule.forRoot({maxMessages: 5, timeout: 5000, position: 'right'}),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [MessageService, HttpErrorHandler, AuthService, PersonnelService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [MessageService, HttpErrorHandler, AuthService, PersonnelService, LocalStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

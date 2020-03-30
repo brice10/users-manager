@@ -1,21 +1,29 @@
+.content {
+    background-color: transparent;
+    background-image: url('./../../../assets/bg-connexion1.jpg');
+    background-size: cover;
+    background-position: center;
+}
 .card {
     max-width: 600px;
     max-height: 500px;
     margin: auto;
-    margin-top: 13%;
+    margin-top: 15em;
     padding: 1%;
+}
+.card-title {
+    color: white;
+    background-color: crimson;
+    margin-bottom: 0px;
 }
 .error-message {
     display: contents;
-    color: red;
+    color: crimson;
 }
 .ng-container {
     text-align: end;
 }
-.bg {
-    // background-image: url('./../../../assets/bg-connexion1.jpg');
-    // background-size: cover;
-    // background-position: center;
-    background-color: black;
-    min-height: 100%;
+.loading{
+    color: white;
+    padding-top: 50px;
 }
