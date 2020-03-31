@@ -11,9 +11,7 @@
                 <div class="view overlay">
                     <img [src]="personnel.photoUrl" class="card-img-top image"
                     alt="">
-                    <a [routerLink]="[personnel.id]">
-                        <div class="mask rgba-white-slight"></div>
-                    </a>
+                    <div class="mask rgba-white-slight"></div>
                 </div>
 
                 <!--Card content-->
@@ -26,7 +24,10 @@
                         card's content.
                     </p>
                     <div class="text-center">
-                        <a [routerLink]="[personnel.id]" class="btn btn-indigo">Voir le profil <i class="fas fa-chevron-right text-white ml-3" aria-hidden="true"></i></a>
+                        <button [disabled]="checkUserState(personnel.id)" [routerLink]="[personnel.id]" class="btn btn-indigo">
+                            Voir le profil 
+                            <i class="fas fa-chevron-right text-white ml-3" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
             </div>

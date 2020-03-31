@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LocalStorageService } from './../../services/store/localStorage.service';
+import { ActionsService } from '../../services/store/actions.service';
+
+import { User } from './../../services/model/user';
 
 @Component({
   selector: 'app-menu-bar',
@@ -12,22 +15,47 @@ import { LocalStorageService } from './../../services/store/localStorage.service
 export class MenuBarComponent implements OnInit {
 
   public isAuth: boolean = false;
+  public user: User = this.localStorageService.getCurrentUserOnLocalStorage();
 
   constructor(
     private localStorageService: LocalStorageService,
+    private actionsService: ActionsService,
     private router: Router,
   ) { 
-    
+    this.localStorageService.suscribe(this);
   }
 
   ngOnInit(): void {
     this.isAuth = this.localStorageService.getAuthStateOnLocalStorage();
-    console.log(this.isAuth);
   }
 
-  public logout() {
-    this.localStorageService.storeAuthStateOnLocalStorage(false);
+  public updateAll(type: string) {
+    if(type === 'CONNECT_USER') {
+      return this.updateData();
+    }
+  }
+
+  public async updateData() {
+    this.user = await this.localStorageService.getCurrentUserOnLocalStorage();
+    this.isAuth = true;
+  }
+
+  public async logout() {
+    await this.actionsService.disconnectUser();
+    this.user = {
+      id: -1,
+      name: '',
+      surname: '',
+      photoUrl: '',
+      poste: '',
+      email: '',
+      password: '',
+    }
     this.router.navigate(['connexion']);
+  }
+
+  public checkUserPoste() {
+    return this.user.poste === 'administrateur';
   }
 
 }

@@ -24,6 +24,7 @@ import { AuthService } from './services/auth.service';
 import { PersonnelService } from './services/personnel.service';
 
 import { LocalStorageService  } from './services/store/localStorage.service';
+import { ActionsService  } from './services/store/actions.service';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AlertModule } from 'ngx-alerts';
@@ -53,7 +54,7 @@ import { AlertModule } from 'ngx-alerts';
     HttpClientModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [MessageService, HttpErrorHandler, AuthService, PersonnelService, LocalStorageService],
+  providers: [MessageService, HttpErrorHandler, AuthService, PersonnelService, ActionsService, LocalStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

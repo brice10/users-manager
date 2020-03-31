@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from './../../services/model/user';
 
 import { LocalStorageService } from './../../services/store/localStorage.service';
+import { ActionsService } from '../../services/store/actions.service';
 import { MessageService } from './../../services/message.service';
 
 import { UserFormValidatorService } from './../../services/userFormValidator.service'
@@ -32,6 +33,7 @@ export class ConnexionComponent implements OnInit {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private actionsService: ActionsService,
     private userFormValidatorService: UserFormValidatorService,
     private authService: AuthService,
     private router: Router,
@@ -62,28 +64,27 @@ export class ConnexionComponent implements OnInit {
 
   public async onLogin() {
     const isAuth: boolean  = this.localStorageService.getAuthStateOnLocalStorage();
-    if(isAuth === true){
+    if(isAuth === true) {
       this.authState = true;
-      this.deleteBackgroundImage();
-      this.router.navigate(['/accueil'])
+      this.navigate();
     } else {
       this.spinner.show('chargement5');
-      await this.authService.login(this.userConnexionData.email, this.userConnexionData.password).subscribe(users => {
+      await this.authService.login(this.userConnexionData.email, this.userConnexionData.password).subscribe(async users => {
         if(!users || users.length === 0) {
           alert("Identifiants incorrects");
         } else {
           this.authState = true;
-          this.localStorageService.storeAuthStateOnLocalStorage(true);
-          const user = this.localStorageService.getCurrentUserOnLocalStorage();
-          if(!user) {
-            this.localStorageService.storeCurrentUserOnLocalStorage(users[0]);
-          }
-          this.deleteBackgroundImage();
-          this.router.navigate(['/accueil'])
+          await this.actionsService.connectUser(users[0]);
+          this.navigate();
         }
         this.spinner.hide('chargement5');
       });
     }
+  }
+
+  public navigate() {
+    this.deleteBackgroundImage();
+    this.router.navigate(['/accueil'])
   }
 
   public ckeckIfUserIsConnected() {

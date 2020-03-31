@@ -115,7 +115,6 @@ export class DashboardComponent implements OnInit {
   }
 
   public async updateUser() {
-    console.log(this.editedUser);
     this.spinner.show('chargement3');
     await this.personnelService.updateUser(this.editedUser).subscribe(user => {
         const index = user

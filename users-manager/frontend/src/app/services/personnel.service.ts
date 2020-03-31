@@ -33,9 +33,10 @@ export class PersonnelService {
 
     public async getAllUsersInLocal() {
         this.spinner.show('chargement1');
-        await this.getAllUsers().subscribe(users => {
+        await this.getAllUsers().subscribe(async users => {
+            if(users && users.length != 0)
+                await this.localStorageService.storeAllUsersOnLocalStorage(users);
             this.spinner.hide('chargement1');
-            this.localStorageService.storeAllUsersOnLocalStorage(users);
         });
     }
     

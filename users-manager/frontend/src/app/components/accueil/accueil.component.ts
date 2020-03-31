@@ -21,11 +21,6 @@ import { Router } from '@angular/router';
 })
 export class AccueilComponent implements OnInit {
 
-  public authState: boolean = false;
-  public userConnexionData: any = {
-    email: '',
-    password: '',
-  };
   public allUsers: any[] = [];
 
   constructor(
@@ -35,33 +30,27 @@ export class AccueilComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private alertService: AlertService,
     private messageService: MessageService,
-  ) { }
+  ) {
+    this.localStorageService.suscribe(this);
+   }
 
   ngOnInit(): void {
     this.deleteBackgroundImage();
   }
 
-  public getAllUsersData() {
-    this.personnelService.getAllUsersInLocal().then(() => {
-      this.allUsers = this.localStorageService.getAllUsersOnLocalStorage();
-    });
+  public updateAll(type: string) {
+    if(type === 'CONNECT_USER') {
+      return this.getAllUsersData();
+    }
   }
 
-  public onLogout() {
-    this.localStorageService.storeAuthStateOnLocalStorage(false);
-    this.authState = false;
+  public async getAllUsersData() {
+    await this.personnelService.getAllUsersInLocal();
+    this.allUsers = await this.localStorageService.getAllUsersOnLocalStorage();
   }
 
   public deleteBackgroundImage() {
     let html = document.querySelector('html');
     html.classList.remove("bg");
   }
-
-  public reset(): void {
-    this. userConnexionData = {
-      email: '',
-      password: '',
-    };
-  }
-
 }

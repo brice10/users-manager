@@ -23,7 +23,7 @@
         <li routerLinkActive="active">
           <a routerLink="accueil"><strong>Accueil</strong></a>
         </li>
-        <li routerLinkActive="active">
+        <li *ngIf="checkUserPoste()" routerLinkActive="active">
           <a routerLink="dashboard"><strong>DashBoard</strong></a>
         </li>
         <li routerLinkActive="active">
