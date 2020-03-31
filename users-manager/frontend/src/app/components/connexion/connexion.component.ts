@@ -45,7 +45,7 @@ export class ConnexionComponent implements OnInit {
   ngOnInit(): void {
     this.ckeckIfUserIsConnected();
     this.setBackgroundImage();
-    this.showAlerts();
+    //this.showAlerts();
   }
 
   showAlerts(): void{
