@@ -10,6 +10,8 @@ import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 import { LocalStorageService } from './store/localStorage.service';
 
+import { MessageService } from './message.service';
+
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable()
@@ -19,6 +21,7 @@ export class PersonnelService {
     
     public constructor(
         private localStorageService: LocalStorageService,
+        private messageService: MessageService,
         private http: HttpClient,
         private httpErrorHandler: HttpErrorHandler,
         private spinner: NgxSpinnerService,
@@ -34,8 +37,10 @@ export class PersonnelService {
     public async getAllUsersInLocal() {
         this.spinner.show('chargement1');
         await this.getAllUsers().subscribe(async users => {
-            if(users && users.length != 0)
+            if(users && users.length != 0) {
                 await this.localStorageService.storeAllUsersOnLocalStorage(users);
+                this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'getAllUsers', message: 'Les données ont bien été mis à jour !!'});
+            }
             this.spinner.hide('chargement1');
         });
     }
@@ -65,4 +70,6 @@ export class PersonnelService {
         .delete(uri)
         .pipe(catchError(this.handleError('deleteUser')));
     }
+
+    
 }

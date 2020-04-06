@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Get all Users in database: URI define
-Route::get('users', 'UserController@getAllUser');
+Route::get('users', 'UserController@getAllUsers');
 
 //Get user by id: URI define
 Route::get('user/{id}', 'UserController@getUserById');
+
+//Get user by id: URI define
+Route::get('user/connexion/{email}/{password}', 'UserController@getUserByEmailAndPassword');
 
 //Create a user in dadabase: URI define
 Route::post('user', 'UserController@createUser');

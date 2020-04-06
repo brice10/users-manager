@@ -51,7 +51,19 @@ export class MenuBarComponent implements OnInit {
       email: '',
       password: '',
     }
+    this.deleteBackgroundImage();
+    this.setBackgroundImage();
     this.router.navigate(['connexion']);
+  }
+
+  public setBackgroundImage() {
+    let html = document.querySelector('html');
+    html.classList.add("bg");
+  }
+
+  public deleteBackgroundImage() {
+    let html = document.querySelector('html');
+    html.classList.remove("bg-dark");
   }
 
   public checkUserPoste() {

@@ -1,5 +1,8 @@
-<div class="container">
-    <h1 class="text-center">Users Manager</h1>
+<div class="container bg-dark">
+    <h1 class="text-center"><strong>Tableau De Bord</strong></h1>
+    <h6 class="text-center"><strong>Le tableau de bord vous permet de gérer tout les personnel de l'entreprise</strong></h6>
+    <hr/>
+    <h4 class="text-left mt-5 mb-3 "><u><strong>Formulaire d'ajout d'un membre du personnel</strong></u></h4>
     <form class="form" [formGroup]="addUserForm" (submit)="addUser()">
         <div class="form-group">
             <input formControlName="name" [(ngModel)]="user.name" type="text" class="form-control" placeholder="nom de l'utilisateur" required/>
@@ -34,8 +37,9 @@
         </div>
 
         <div class="form-group">
-            <label for="exampleFormControlSelect1">Choisir le poste</label>
+    
             <select [(ngModel)]="user.poste" formControlName="poste" class="form-control" id="exampleFormControlSelect1" required>
+                <option value="" disabled selected>Choisir le poste</option>
                 <option value="administrateur">administrateur</option>
                 <option value="employe">employé</option>
             </select>
@@ -61,8 +65,28 @@
         </button>
     </form>
 
-    <table class="table">
+    <table class="table table-light">
+
+        <thead>
+            <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Photo</th>
+                <th class="text-center">photo Url</th>
+                <th class="text-center">Poste</th>
+                <th class="text-center">Nom</th>
+                <th class="text-center">Prénom</th>
+                <th class="text-center">Adresse e-mail</th>
+                <th class="text-center">Mot de passe</th>
+                <th class="text-center" style="color: crimson;">Opérations</th>
+            </tr>
+        </thead>
+
         <tr *ngFor="let user of allUsers">
+            <td>
+                <span>
+                    {{ allUsers.indexOf(user) + 1 }}
+                </span>
+            </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
                     <span class="img-box"> 
@@ -80,6 +104,7 @@
                 <a (click)="editUserCurrentInformation(user)">
                     <span *ngIf="user!==editedUser"> {{ user.poste }} </span>
                     <select *ngIf="user===editedUser" (change)="notifyPosteChange($event.target.value)" formControlName="poste" class="form-control" (blur)="updateUser()" (keyup.enter)="updateUser()" required>
+                        <option value="" disabled selected>Choisir le poste</option>
                         <option value="administrateur">administrateur</option>
                         <option value="employe">employé</option>
                     </select>
@@ -117,7 +142,7 @@
         </tr>
     </table>
 
-    <div class="card card-body bg-light text-center">
+    <div class="card card-body bg-dark text-center">
         <span class="small">Click on item to edit</span>
     </div>
 </div>

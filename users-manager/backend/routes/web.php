@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/photoUrl', 'UserController@getPhotoUrl')->name('photoUrl');
+
+Route::post('/photoUrl/update', 'UserController@updatePhotoUrl')->name('photoUrl.update');

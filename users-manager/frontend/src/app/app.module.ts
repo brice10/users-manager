@@ -48,7 +48,7 @@ import { AlertModule } from 'ngx-alerts';
     MDBBootstrapModule.forRoot(),
     AppRoutingModule,
     NgxSpinnerModule,
-    AlertModule.forRoot({maxMessages: 5, timeout: 5000, position: 'right'}),
+    AlertModule.forRoot({maxMessages: 5, timeout: 6000, position: 'right'}),
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

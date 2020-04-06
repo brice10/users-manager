@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, } from '@angular/router';
 
 import { User } from './../../services/model/user';
 
@@ -12,21 +12,27 @@ import { AlertService } from 'ngx-alerts';
   selector: 'app-profil',
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.scss'],
-  providers: [AlertService, MessageService],
+  providers: [AlertService,],
 })
 export class ProfilComponent implements OnInit {
 
   public personnelData: User;
+  public currentUser: User;
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private localStorageService: LocalStorageService,
     private alertService: AlertService,
     private messageService: MessageService,
-  ) { }
+  ) {
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    this.personnelData = this.localStorageService.getAllUsersOnLocalStorage().find(member => member.id == id);
+      const allUsers = this.localStorageService.getAllUsersOnLocalStorage();
+      const id = this.route.snapshot.params['id'];
+      this.personnelData = allUsers.find(member => member.id == id);
+      this.currentUser = this.localStorageService.getCurrentUserOnLocalStorage();
+    }
+
+  ngOnInit() {
   }
 
 }

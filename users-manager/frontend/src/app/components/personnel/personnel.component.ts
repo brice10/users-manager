@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 
 import { LocalStorageService } from './../../services/store/localStorage.service';
 import { MessageService } from './../../services/message.service';
@@ -17,6 +17,8 @@ export class PersonnelComponent implements OnInit {
 
   public user: User;
   public allUsers: any[] = [];
+  public adminList: any[] = [];
+  public memberList: any[] = [];
   
   constructor(
     private localStorageService: LocalStorageService,
@@ -33,6 +35,8 @@ export class PersonnelComponent implements OnInit {
   public async getAllUsers() {
     this.allUsers = await this.localStorageService.getAllUsersOnLocalStorage();
     this.user = await this.localStorageService.getCurrentUserOnLocalStorage()
+    this.adminList = this.allUsers.filter(user => user.poste === 'administrateur');
+    this.memberList = this.allUsers.filter(user => user.poste === 'employe');
   }
 
   public checkUserState(id: number) {

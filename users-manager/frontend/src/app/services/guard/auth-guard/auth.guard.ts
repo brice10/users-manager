@@ -9,8 +9,8 @@ export class AuthGuard implements CanActivate {
 
   constructor(public localStorageService: LocalStorageService, public router: Router) {}
 
-  canActivate(): boolean {
-    const isAuth: boolean  = this.localStorageService.getAuthStateOnLocalStorage();
+  async canActivate(): Promise<boolean> {
+    const isAuth: boolean  = await this.localStorageService.getAuthStateOnLocalStorage();
     if (!isAuth) {
       this.router.navigate(["connexion"]);
       return false;

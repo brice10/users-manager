@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   selector: 'app-connexion',
   templateUrl: './connexion.component.html',
   styleUrls: ['./connexion.component.scss'],
-  providers: [UserFormValidatorService, AlertService, MessageService,],
+  providers: [UserFormValidatorService, AlertService,],
 })
 export class ConnexionComponent implements OnInit {
 
@@ -40,12 +40,29 @@ export class ConnexionComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private alertService: AlertService,
     private messageService: MessageService,
-  ) { }
+  ) {
+    this.localStorageService.suscribe(this);
+   }
 
   ngOnInit(): void {
     this.ckeckIfUserIsConnected();
     this.setBackgroundImage();
-    //this.showAlerts();
+  }
+
+  public updateAll(type: string) {
+    if(type === 'NEW_MESSAGE') {
+      return this.displayMessage();
+    }
+  }
+
+  public async displayMessage() {
+    const incomingMessage = this.messageService.incomingMessage;
+    if(incomingMessage.type === 'error' && incomingMessage.service === 'AuthService' && incomingMessage.operation === 'login') {
+      this.alertService.danger('Erreur de réseau veuillez vérifier votre connextion à internet puis réessayer');
+      await this.localStorageService.deleteMessageOnLocalStorage(incomingMessage);
+      return;
+    }
+    //this.alertService.danger('Identifiants incorrects !!!');
   }
 
   showAlerts(): void{
@@ -53,7 +70,7 @@ export class ConnexionComponent implements OnInit {
     this.alertService.danger('this is a danger alert');
     this.alertService.success('this is a success alert');
     this.alertService.warning('this is a warning alert');
-  }   
+  }
 
   get email() {
     return this.connectUserForm.get('email');
@@ -70,13 +87,12 @@ export class ConnexionComponent implements OnInit {
     } else {
       this.spinner.show('chargement5');
       await this.authService.login(this.userConnexionData.email, this.userConnexionData.password).subscribe(async users => {
-        if(!users || users.length === 0) {
-          alert("Identifiants incorrects");
-        } else {
+        if(users && users.length !== 0) {
           this.authState = true;
           await this.actionsService.connectUser(users[0]);
           this.navigate();
-        }
+        } else
+          this.alertService.danger('Identifiants Incorrects !!!');
         this.spinner.hide('chargement5');
       });
     }
