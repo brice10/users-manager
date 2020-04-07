@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 use App\User;
@@ -45,4 +49,26 @@ class UserController extends Controller
         $user->delete();
         return 204;
     }
+	
+	//Return url of upload file
+	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    public function uploadImage(Request $request)
+    {
+		if ($request->hasFile('image'))
+		{
+			$file      = $request->file('image');
+			$filename  = $file->getClientOriginalName();
+			$extension = $file->getClientOriginalExtension();
+			$picture   = date('His').'-'.$filename;
+			$file->move(public_path('images'), $picture);
+			return response()->json(["message" => "Image Uploaded Succesfully", "photoUrl" => "http://localhost:8000/api/" . $filename]);
+		} else {
+			return response()->json(["message" => "Select image first."]);
+		}
+    }
+	
+	public function getImage($photoUrl) {
+		
+	}
+	
 }

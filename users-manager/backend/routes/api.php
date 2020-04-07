@@ -26,6 +26,12 @@ Route::get('user/connexion/{email}/{password}', 'UserController@getUserByEmailAn
 //Create a user in dadabase: URI define
 Route::post('user', 'UserController@createUser');
 
+//Upload profile in dadabase: URI define
+Route::post('upload', 'UserController@uploadImage');
+
+//Get profile in dadabase: URI define
+Route::get('{photoUrl}', 'UserController@getImage');
+
 //Update a user in database: URI define
 Route::put('user/{id}', 'UserController@updateUser');
 

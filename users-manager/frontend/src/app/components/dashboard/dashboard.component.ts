@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   public validForm: boolean = false;
   public errorMessages: any = this.userFormValidatorService.errorMessages;
   public addUserForm: any =  this.userFormValidatorService.addUserForm;
+  public fileData: File = null;
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -113,24 +114,43 @@ export class DashboardComponent implements OnInit {
       this.allUsers = allUsers;
   }
 
+  public async fileProgress(file: File) {
+    this.fileData = file;
+    await this.uploadPhoto();
+  }
+
+  public async uploadPhoto() {
+    var formData = new FormData();
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileData);
+    reader.onload = () => {
+      this.user.photoUrl = reader.result as string;
+    }
+    formData.append('image', this.fileData);
+    await this.personnelService.uploadPhoto(formData).subscribe(res => {
+      console.log(res);
+    });
+  }
+
   public async addUser() {
     this.editedUser = undefined;
     this.user.name = this.user.name.trim();
     this.user.surname = this.user.surname.trim();
     this.user.email = this.user.email.trim();
 
-    if(!this.user.name || !this.user.surname || !this.user.email || !this.user.photoUrl || !this.user.password)
+    if(!this.user.name || !this.user.surname || !this.user.photoUrl || !this.user.email || !this.user.password)
       return;
     
     this.spinner.show('chargement2');
+    //this.user.photoUrl = this.user.photoUrl.substr(0, 30);
     await this.personnelService.createUser(this.user).subscribe( async user => {
       if(user) {
         await this.localStorageService.storeOneUserOnLocalStorage(user);
         this.allUsers = await this.localStorageService.getAllUsersOnLocalStorage();
         this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'createUser', message: ''});
         this.reset();
+        this.spinner.hide('chargement2');
       }
-      this.spinner.hide('chargement2');
     });
   }
 

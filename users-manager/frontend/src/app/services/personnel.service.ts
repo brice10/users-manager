@@ -14,6 +14,8 @@ import { MessageService } from './message.service';
 
 import { NgxSpinnerService } from 'ngx-spinner';
 
+import * as baseUrl from './prefix';
+
 @Injectable()
 export class PersonnelService {
 
@@ -47,29 +49,37 @@ export class PersonnelService {
     
     public getAllUsers(): Observable <User[]> {
         return this.http
-        .get<User[]>('http://localhost:8000/api/users')
+        .get<User[]>(baseUrl.SERVER_BASE_URL + 'users')
         .pipe(catchError(this.handleError('getAllUsers', [])));
     }
 
     public createUser(user: User): Observable <User> {
         return this.http
-        .post<User>('http://localhost:8000/api/user', user)
+        .post<User>(baseUrl.SERVER_BASE_URL + 'user', user)
         .pipe(catchError(this.handleError('createUser', user)));
     }
 
     public updateUser(user: User): Observable <User> {
-        const uri = `http://localhost:8000/api/user/${user.id}`;
+        const uri = `${baseUrl.SERVER_BASE_URL}user/${user.id}`;
         return this.http
         .put<User>(uri, user)
         .pipe(catchError(this.handleError('updateUser', user)));
     }
 
     public deleteUser(id: number): Observable <{}> {
-        const uri = `http://localhost:8000/api/user/${id}`;
+        const uri = `${baseUrl.SERVER_BASE_URL}user/${id}`;
         return this.http
         .delete(uri)
         .pipe(catchError(this.handleError('deleteUser')));
     }
 
+    public uploadPhoto(formData) {
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.append('Accept', 'application/json');
+        return this.http
+        .post(baseUrl.SERVER_BASE_URL + 'upload', formData, { headers: headers })
+        .pipe(catchError(this.handleError('uploadPhoto', formData)));
+    }
     
 }

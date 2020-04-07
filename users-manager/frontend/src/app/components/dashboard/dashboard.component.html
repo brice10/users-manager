@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            <input formControlName="photoUrl" [(ngModel)]="user.photoUrl" type="file" class="form-control" placeholder="photo de l'utilisateur" accept=".png, .jpg, .jpeg" class="form-control-file" required/>
+            <input formControlName="photoUrl" type="file" class="form-control" placeholder="photo de l'utilisateur" accept=".png, .jpg, .jpeg" class="form-control-file" (change)="fileProgress($event.target.files[0])" required/>
         </div>
 
         <div class="form-group">
@@ -96,8 +96,8 @@
             </td>
             <td class="text-left">
                 <a (click)="editUserCurrentInformation(user)">
-                    <span *ngIf="user!==editedUser"> Photo: {{ user.photoUrl }} </span>
-                    <input *ngIf="user===editedUser" class="form-control" type="file" [(ngModel)]="user.photoUrl" accept=".png, .jpg, .jpeg" (blur)="updateUser()" class="form-control-file" required/>
+                    <span *ngIf="user!==editedUser"> Photo: {{ user.photoUrl.substr(0, 20) + '...' }} </span>
+                    <input *ngIf="user===editedUser" class="form-control" type="file" [(ngModel)]="user.photoUrl" accept=".png, .jpg, .jpeg" (blur)="updateUser()" class="form-control-file" (change)="fileProgress($event.target.files[0])" required/>
                 </a>
             </td>
             <td class="text-left">

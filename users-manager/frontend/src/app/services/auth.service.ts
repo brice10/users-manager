@@ -9,6 +9,8 @@ import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 import { Router } from '@angular/router';
 
+import * as baseUrl from './prefix';
+
 @Injectable()
 export class AuthService {
 
@@ -17,13 +19,12 @@ export class AuthService {
     public constructor(
         private http: HttpClient,
         private httpErrorHandler: HttpErrorHandler,
-        private router: Router,
     ) {
         this.handleError = httpErrorHandler.createHandleError('AuthService');
     }
 
     public login(email: string, password: string): Observable <User[]> {
-        const uri = `http://localhost:8000/api/user/connexion/${email}/${password}`;
+        const uri = `${baseUrl.SERVER_BASE_URL}user/connexion/${email}/${password}`;
         return this.http
         .get<User[]>(uri)
         .pipe(catchError(this.handleError('login', [])));
