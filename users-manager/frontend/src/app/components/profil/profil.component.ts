@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { User } from './../../services/model/user';
 
 import { LocalStorageService } from './../../services/store/localStorage.service';
-import { MessageService } from './../../services/message.service';
 
 import { AlertService } from 'ngx-alerts';
 
@@ -19,11 +18,9 @@ export class ProfilComponent implements OnInit {
   public personnelData: User;
   public currentUser: User;
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private localStorageService: LocalStorageService,
     private alertService: AlertService,
-    private messageService: MessageService,
   ) {
 
       const allUsers = this.localStorageService.getAllUsersOnLocalStorage();
