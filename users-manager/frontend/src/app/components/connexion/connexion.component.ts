@@ -30,6 +30,7 @@ export class ConnexionComponent implements OnInit {
   public validForm: boolean = false;
   public errorMessages: any = this.userFormValidatorService.errorMessages;
   public connectUserForm: any =  this.userFormValidatorService.connectUserForm;
+  public errorType: string = '';
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -58,11 +59,11 @@ export class ConnexionComponent implements OnInit {
   public async displayMessage() {
     const incomingMessage = this.messageService.incomingMessage;
     if(incomingMessage.type === 'error' && incomingMessage.service === 'AuthService' && incomingMessage.operation === 'login') {
+      this.errorType = 'networkError';
       this.alertService.danger('Erreur de réseau veuillez vérifier votre connextion à internet puis réessayer');
       await this.localStorageService.deleteMessageOnLocalStorage(incomingMessage);
       return;
     }
-    //this.alertService.danger('Identifiants incorrects !!!');
   }
 
   get email() {
@@ -84,8 +85,11 @@ export class ConnexionComponent implements OnInit {
           this.authState = true;
           await this.actionsService.connectUser(users[0]);
           this.navigate();
-        } else
-          this.alertService.danger('Identifiants Incorrects !!!');
+        }
+        if(this.errorType !== 'networkError') {
+          this.alertService.danger('Identifiants incorrects !!!');
+          this.errorType = '';
+        }
         this.spinner.hide('chargement5');
       });
     }

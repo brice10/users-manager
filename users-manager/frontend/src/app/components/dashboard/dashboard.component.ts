@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   public errorMessages: any = this.userFormValidatorService.errorMessages;
   public addUserForm: any =  this.userFormValidatorService.addUserForm;
   public fileData: File = null;
+  public errorType: string = '';
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -57,16 +58,19 @@ export class DashboardComponent implements OnInit {
   public async displayMessage() {
     const incomingMessage = this.messageService.incomingMessage;
     if(incomingMessage.type === 'error' && incomingMessage.service === 'PersonnelService' && incomingMessage.operation === 'createUser') {
+      this.errorType = 'createUserError';
       this.alertService.warning('Echec de l\'enregistrement, veuillez vérifiez voter connexion internet puis réessayer!');
       await this.localStorageService.deleteMessageOnLocalStorage(incomingMessage);
       return;
     }
     if(incomingMessage.type === 'error' && incomingMessage.service === 'PersonnelService' && incomingMessage.operation === 'updateUser') {
+      this.errorType = 'updateUserError';  
       this.alertService.warning('Echec de la mise à jour, veuillez vérifiez voter connexion internet puis réessayer!');
       await this.localStorageService.deleteMessageOnLocalStorage(incomingMessage);
       return;
     }
     if(incomingMessage.type === 'error' && incomingMessage.service === 'PersonnelService' && incomingMessage.operation === 'deleteUser') {
+      this.errorType = 'deleteUserError';
       this.alertService.warning('Echec de la suppréssion, veuillez vérifiez voter connexion internet puis réessayer!');
       await this.localStorageService.deleteMessageOnLocalStorage(incomingMessage);
       return;
@@ -127,9 +131,7 @@ export class DashboardComponent implements OnInit {
       this.user.photoUrl = reader.result as string;
     }
     formData.append('image', this.fileData);
-    await this.personnelService.uploadPhoto(formData).subscribe(res => {
-      console.log(res);
-    });
+    await this.personnelService.uploadPhoto(formData).subscribe();
   }
 
   public async addUser() {
@@ -142,15 +144,15 @@ export class DashboardComponent implements OnInit {
       return;
     
     this.spinner.show('chargement2');
-    //this.user.photoUrl = this.user.photoUrl.substr(0, 30);
     await this.personnelService.createUser(this.user).subscribe( async user => {
-      if(user) {
+      if(this.errorType !== 'createUserError') {
         await this.localStorageService.storeOneUserOnLocalStorage(user);
         this.allUsers = await this.localStorageService.getAllUsersOnLocalStorage();
         this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'createUser', message: ''});
         this.reset();
-        this.spinner.hide('chargement2');
       }
+      this.errorType = '';
+      this.spinner.hide('chargement2');
     });
   }
 
@@ -182,7 +184,7 @@ export class DashboardComponent implements OnInit {
   public async updateUser() {
     this.spinner.show('chargement3');
     await this.personnelService.updateUser(this.editedUser).subscribe(async user => {
-      if(user) {
+      if(this.errorType !== 'updateUserError') {
         const index = user
                   ? this.allUsers.findIndex(member => member.id === user.id)
                   : -1;
@@ -192,6 +194,7 @@ export class DashboardComponent implements OnInit {
           this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'updateUser', message: ''});
         }
       }
+      this.errorType = '';
       this.spinner.hide('chargement3');
     });
   }
@@ -199,11 +202,14 @@ export class DashboardComponent implements OnInit {
   public async deleteUser(user: User) {
     this.spinner.show('chargement4');
     await this.personnelService.deleteUser(user.id).subscribe(async () => {
-      this.allUsers = this.allUsers.length === 1
-                    ? []
-                    : this.allUsers.filter(member => member !== user);
-      await this.localStorageService.storeAllUsersOnLocalStorage(this.allUsers);
-      this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'deleteUser', message: ''});
+      if(this.errorType !== 'deleteUserError') {
+        this.allUsers = this.allUsers.length === 1
+                      ? []
+                      : this.allUsers.filter(member => member !== user);
+        await this.localStorageService.storeAllUsersOnLocalStorage(this.allUsers);
+        this.messageService.add({type: 'success', service: 'PersonnelService', operation: 'deleteUser', message: ''});
+      }
+      this.errorType = '';
       this.spinner.hide('chargement4');
     });
   }
